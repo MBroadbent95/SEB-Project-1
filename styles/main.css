@@ -1,3 +1,38 @@
 * {
   box-sizing: border-box;
 }
+
+body {
+  height: 100vh; /* play with this later, what does it do? can we do cool stuff?  */
+  margin: 0;
+}
+
+.grid-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid {
+  align-items: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  height: 600px;
+  width: 600px;
+}
+
+.grid div {
+  flex-grow: 1;
+  height: 6.7%;
+  width: 6%;
+  border: 1px solid lightgray;
+}
+
+.grid div.player {
+  background-image: url("/assets/alien.jpg"); /* placeholder used, remember to change to a player avatar */
+  background-repeat: no-repeat;
+  background-size: contain;
+}
