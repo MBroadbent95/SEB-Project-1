@@ -32,7 +32,17 @@ body {
 }
 
 .grid div.player {
-  background-image: url("/assets/alien.jpg"); /* placeholder used, remember to change to a player avatar */
+  background-image: url("assets/playerShip.png"); /* placeholder used, remember to change to a player avatar */
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.grid div.alien {
+  background-image: url("assets/alien.jpg"); /* placeholder used, remember to change to a player avatar */
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.grid div.shot {
+  background-image: url("assets/newRocket.png"); /* placeholder used, remember to change to a player avatar */
   background-repeat: no-repeat;
   background-size: contain;
 }

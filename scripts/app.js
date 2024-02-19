@@ -7,6 +7,7 @@ const cells = [];
 let playerCurrentPosition = 215;
 const playerBoundaryLeft = 208;
 const playerBoundaryRight = 223;
+let alienCurrentPosition = 71;
 
 function createGrid() {
   for (let i = 0; i < cellCount; i++) {
@@ -16,14 +17,27 @@ function createGrid() {
     cells.push(cell);
   }
   addPlayer(playerCurrentPosition);
+  addOneAlien(alienCurrentPosition);
 }
 
 function addPlayer(position) {
   cells[position].classList.add("player");
 }
+function addOneAlien(position) {
+  cells[position].classList.add("alien");
+}
 
 function removePlayer(position) {
   cells[position].classList.remove("player");
+}
+function removeOneAlien(position) {
+  cells[position].classList.remove("alien");
+}
+function removeShot(position) {
+  cells[position].classList.remove("shot");
+}
+function addShot(position) {
+  cells[position].classList.add("shot");
 }
 
 createGrid();
@@ -37,9 +51,26 @@ function handleKeyDown(event) {
     playerCurrentPosition !== playerBoundaryRight
   ) {
     playerCurrentPosition++;
+  } else if (event.keyCode === 32) {
+    fireShot();
+    console.log("A shot was fired!");
   }
   addPlayer(playerCurrentPosition);
   console.log(`player current position ${playerCurrentPosition}`);
 }
 
+function fireShot() {
+  let shotStart = playerCurrentPosition - 16;
+  const shotInterval = setInterval(() => {
+    removeShot(shotStart);
+    shotStart = shotStart - 16;
+    addShot(shotStart);
+    console.log(shotStart);
+    if (shotStart < 16) {
+      console.log("the shot has stopped");
+      removeShot(shotStart);
+      clearInterval(shotInterval);
+    }
+  }, 150);
+}
 document.addEventListener("keydown", handleKeyDown);
