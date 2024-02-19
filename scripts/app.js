@@ -7,7 +7,27 @@ const cells = [];
 let playerCurrentPosition = 215;
 const playerBoundaryLeft = 208;
 const playerBoundaryRight = 223;
-let alienCurrentPosition = 71;
+//let alienCurrentPosition = 71;
+
+let alienArmy = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
+  32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 48, 49, 50, 51, 52, 53, 54, 55,
+  56, 57, 58,
+];
+let alienPosition = 34;
+
+function drawAliens() {
+  alienArmy.forEach((relativePosition) =>
+    cells[relativePosition + alienPosition].classList.add("alien")
+  );
+}
+
+function removeAlien() {
+  alienArmy.forEach(
+    (relativePosition) =>
+      cells[relativePosition + alienPosition.classList.remove("alien")]
+  );
+}
 
 function createGrid() {
   for (let i = 0; i < cellCount; i++) {
@@ -17,22 +37,24 @@ function createGrid() {
     cells.push(cell);
   }
   addPlayer(playerCurrentPosition);
-  addOneAlien(alienCurrentPosition);
+  //addOneAlien(alienCurrentPosition);
+  drawAliens();
 }
 
 function addPlayer(position) {
   cells[position].classList.add("player");
 }
-function addOneAlien(position) {
-  cells[position].classList.add("alien");
-}
+
+// function addOneAlien(position) {
+//   cells[position].classList.add("alien");
+// }
 
 function removePlayer(position) {
   cells[position].classList.remove("player");
 }
-function removeOneAlien(position) {
-  cells[position].classList.remove("alien");
-}
+// function removeOneAlien(position) {
+//   cells[position].classList.remove("alien");
+// }
 function removeShot(position) {
   cells[position].classList.remove("shot");
 }
@@ -71,12 +93,24 @@ function fireShot() {
       removeShot(shotStart);
       clearInterval(shotInterval);
     }
-    if (shotStart === alienCurrentPosition) {
+    let hitByShot = alienArmy.find(
+      (alienRelativePosition) =>
+        alienRelativePosition + alienPosition === shotStart
+    );
+    if (hitByShot != null) {
+      cells[hitByShot + alienPosition].classList.remove("alien");
       removeShot(shotStart);
-      removeOneAlien(alienCurrentPosition);
-      ///score
+      alienArmy = alienArmy.filter((alien) => alien !== hitByShot);
       clearInterval(shotInterval);
     }
+    // if (shotStart === alienPosition) {
+    //   removeShot(shotStart);
+
+    //   //removeAlien(alienPosition);
+    //   ///score
+    //   clearInterval(shotInterval);
+    //   console.log("the alien was destroyed");
+    // }
   }, 150);
 }
 document.addEventListener("keydown", handleKeyDown);
