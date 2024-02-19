@@ -71,6 +71,12 @@ function fireShot() {
       removeShot(shotStart);
       clearInterval(shotInterval);
     }
+    if (shotStart === alienCurrentPosition) {
+      removeShot(shotStart);
+      removeOneAlien(alienCurrentPosition);
+      ///score
+      clearInterval(shotInterval);
+    }
   }, 150);
 }
 document.addEventListener("keydown", handleKeyDown);
