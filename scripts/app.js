@@ -113,4 +113,11 @@ function fireShot() {
     // }
   }, 150);
 }
+
+function randomAlien(alienArmy) {
+  return alienArmy[Math.floor(Math.random() * alienArmy.length)];
+}
+// this function successfully finds a random alien from the alien Army array
+// tomorrow we will incorporate this into a bomb dropping system.
+console.log(randomAlien(alienArmy));
 document.addEventListener("keydown", handleKeyDown);
