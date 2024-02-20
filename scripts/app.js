@@ -14,8 +14,9 @@ const livesDisplay = document.getElementById("lives-display");
 const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
 let invasionBegins = null;
-let gameSpeed = 100;
+let gameSpeed = 3000;
 let isPlaying = false;
+let direction = "RIGHT";
 
 function reset() {
   playerScore = 0;
@@ -25,6 +26,7 @@ function reset() {
   isPlaying = false;
   removeAlien();
   clearInterval(invasionBegins);
+  //invasionBegins = null;
 }
 
 let alienArmy = [
@@ -55,7 +57,7 @@ function createGrid() {
   }
   //addPlayer(playerCurrentPosition);
   //addOneAlien(alienCurrentPosition);
-  drawAliens();
+  //drawAliens();
 }
 
 function addPlayer(position) {
@@ -137,6 +139,9 @@ function fireShot() {
       cells[hitByShot + alienPosition].classList.remove("alien");
       removeShot(shotStart);
       alienArmy = alienArmy.filter((alien) => alien !== hitByShot);
+      playerScore += 100;
+      console.log(`player score is ${playerScore}`);
+      scoreDisplay.textContent = playerScore;
       clearInterval(shotInterval);
     }
     // if (shotStart === alienPosition) {
@@ -175,8 +180,6 @@ function dropBomb() {
   }, 500);
 }
 
-let direction = "RIGHT";
-
 function moveAliens() {
   if (direction === "RIGHT") {
     if (alienPosition % 16 === 5) {
@@ -201,6 +204,7 @@ function moveAliens() {
 
 function endGame() {
   clearInterval(invasionBegins);
+  removePlayer();
   removeAlien();
   alienPosition = 18;
   setTimeout(() => alert(playerScore), 50);
@@ -223,9 +227,25 @@ function invaded() {
   }
 }
 
+// function victory() {
+//   console.log("Victory!");
+//   /////increase score
+//   //// reset game
+//   gameSpeed -= 500;
+//   ////begin game
+//   playerScore += 1000;
+//   scoreDisplay.textContent = playerScore;
+//   lives = 3;
+//   livesDisplay.innerHTML = "❤".repeat(lives);
+//   // isPlaying = false;
+//   clearInterval(invasionBegins);
+//   startGame();
+// }
+
 function startGame() {
   if (!isPlaying) {
     isPlaying = !isPlaying;
+    drawAliens();
     addPlayer(playerCurrentPosition);
     invasionBegins = setInterval(() => {
       moveAliens();
@@ -234,6 +254,10 @@ function startGame() {
       if (!lives) {
         endGame();
       }
+      // if ((alienArmy.length = undefined)) {
+      //   console.log("Victory!");
+      //   //   victory();
+      // }
       livesDisplay.innerHTML = lives ? "❤".repeat(lives) : "☠";
     }, gameSpeed);
   }
