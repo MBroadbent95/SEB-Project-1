@@ -7,7 +7,25 @@ const cells = [];
 let playerCurrentPosition = 199;
 const playerBoundaryLeft = 192;
 const playerBoundaryRight = 207;
-//let alienCurrentPosition = 71;
+let playerScore = 0;
+const scoreDisplay = document.getElementById("score-display");
+let lives = 3;
+const livesDisplay = document.getElementById("lives-display");
+const resetButton = document.getElementById("reset");
+const startButton = document.getElementById("start");
+let invasionBegins = null;
+let gameSpeed = 2000;
+let isPlaying = false;
+
+function reset() {
+  playerScore = 0;
+  scoreDisplay.textContent = playerScore;
+  lives = 3;
+  livesDisplay.innerHTML = "❤".repeat(lives);
+  isPlaying = false;
+  removeAlien();
+  clearInterval(invasionBegins);
+}
 
 let alienArmy = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26,
@@ -35,7 +53,7 @@ function createGrid() {
     grid.appendChild(cell);
     cells.push(cell);
   }
-  addPlayer(playerCurrentPosition);
+  //addPlayer(playerCurrentPosition);
   //addOneAlien(alienCurrentPosition);
   drawAliens();
 }
@@ -81,8 +99,6 @@ function aMoveDown() {
   alienPosition = alienPosition + 16;
   drawAliens();
 }
-
-createGrid();
 
 function handleKeyDown(event) {
   removePlayer(playerCurrentPosition);
@@ -154,7 +170,7 @@ function dropBomb() {
       removeBomb(bombStart);
       clearInterval(dropInterval);
       console.log("player got dunked!");
-      //playerLives--;-----------------------------------------------------------------------
+      lives--;
     }
   }, 500);
 }
@@ -162,32 +178,75 @@ function dropBomb() {
 let direction = "RIGHT";
 
 function moveAliens() {
-  setInterval(() => {
-    if (direction === "RIGHT") {
-      if (alienPosition % 16 === 5) {
-        aMoveDown();
-        direction = "LEFT";
-        console.log("movedown 1 is called");
-      } else {
-        aMoveRight();
-        console.log("moveright is called");
-      }
-    } else if (direction === "LEFT") {
-      if (alienPosition % 16 === 0) {
-        aMoveDown();
-        direction = "RIGHT";
-        console.log("movedown 2 is called");
-      } else {
-        aMoveLeft();
-        console.log("moveleft is called");
-      }
+  //setInterval(() => {
+  if (direction === "RIGHT") {
+    if (alienPosition % 16 === 5) {
+      aMoveDown();
+      direction = "LEFT";
+      console.log("movedown 1 is called");
+    } else {
+      aMoveRight();
+      console.log("moveright is called");
     }
-  }, 2000);
+  } else if (direction === "LEFT") {
+    if (alienPosition % 16 === 0) {
+      aMoveDown();
+      direction = "RIGHT";
+      console.log("movedown 2 is called");
+    } else {
+      aMoveLeft();
+      console.log("moveleft is called");
+    }
+  }
+  //}, 2000);
 }
 
+function endGame() {
+  if (!lives) {
+    clearInterval(invasionBegins);
+    removeAlien();
+    alienPosition = 18;
+    setTimeout(() => alert(playerScore), 50);
+    const highScore = localStorage.removeItem("high-score");
+    if (!highScore || playerScore > highScore) {
+      localStorage.setItem("high-score", playerScore);
+    }
+  }
+}
+
+function invaded() {
+  if (
+    alienArmy.some(
+      (relativePosition) =>
+        relativePosition + alienPosition === playerCurrentPosition
+    )
+  ) {
+    clearInterval(invasionBegins);
+    endGame();
+  }
+}
+
+function startGame() {
+  if (!isPlaying) {
+    isPlaying = !isPlaying;
+    addPlayer(playerCurrentPosition);
+    invasionBegins = setInterval(() => {
+      moveAliens();
+      dropBomb();
+      if (!lives) {
+        endGame();
+      }
+      livesDisplay.innerHTML = lives ? "❤".repeat(lives) : "☠";
+    }, gameSpeed);
+  }
+}
+
+createGrid();
 // this function successfully finds a random alien from the alien Army array
 // tomorrow we will incorporate this into a bomb dropping system.
-moveAliens();
+//moveAliens();
 //dropBomb();
 //console.log(alienPosition);
 document.addEventListener("keydown", handleKeyDown);
+startButton.addEventListener("click", startGame);
+resetButton.addEventListener("click", reset);
