@@ -23,9 +23,8 @@ function drawAliens() {
 }
 
 function removeAlien() {
-  alienArmy.forEach(
-    (relativePosition) =>
-      cells[relativePosition + alienPosition.classList.remove("alien")]
+  alienArmy.forEach((relativePosition) =>
+    cells[relativePosition + alienPosition].classList.remove("alien")
   );
 }
 
@@ -66,6 +65,21 @@ function removeBomb(position) {
 }
 function addBomb(position) {
   cells[position].classList.add("bomb");
+}
+function aMoveRight() {
+  removeAlien();
+  alienPosition = alienPosition + 1;
+  drawAliens();
+}
+function aMoveLeft() {
+  removeAlien();
+  alienPosition = alienPosition - 1;
+  drawAliens();
+}
+function aMoveDown() {
+  removeAlien();
+  alienPosition = alienPosition + 16;
+  drawAliens();
 }
 
 createGrid();
@@ -145,8 +159,35 @@ function dropBomb() {
   }, 500);
 }
 
+let direction = "RIGHT";
+
+function moveAliens() {
+  setInterval(() => {
+    if (direction === "RIGHT") {
+      if (alienPosition % 16 === 5) {
+        aMoveDown();
+        direction = "LEFT";
+        console.log("movedown 1 is called");
+      } else {
+        aMoveRight();
+        console.log("moveright is called");
+      }
+    } else if (direction === "LEFT") {
+      if (alienPosition % 16 === 0) {
+        aMoveDown();
+        direction = "RIGHT";
+        console.log("movedown 2 is called");
+      } else {
+        aMoveLeft();
+        console.log("moveleft is called");
+      }
+    }
+  }, 2000);
+}
+
 // this function successfully finds a random alien from the alien Army array
 // tomorrow we will incorporate this into a bomb dropping system.
-dropBomb();
-console.log(randomAlien());
+moveAliens();
+//dropBomb();
+//console.log(alienPosition);
 document.addEventListener("keydown", handleKeyDown);
