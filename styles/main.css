@@ -46,3 +46,8 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+.grid div.bomb {
+  background-image: url("assets/bomb.png"); /* placeholder used, remember to change to a player avatar */
+  background-repeat: no-repeat;
+  background-size: contain;
+}

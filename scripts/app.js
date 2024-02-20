@@ -61,6 +61,12 @@ function removeShot(position) {
 function addShot(position) {
   cells[position].classList.add("shot");
 }
+function removeBomb(position) {
+  cells[position].classList.remove("bomb");
+}
+function addBomb(position) {
+  cells[position].classList.add("bomb");
+}
 
 createGrid();
 
@@ -114,10 +120,33 @@ function fireShot() {
   }, 150);
 }
 
-function randomAlien(alienArmy) {
+function randomAlien() {
   return alienArmy[Math.floor(Math.random() * alienArmy.length)];
 }
+
+function dropBomb() {
+  let bombStart = randomAlien() + alienPosition;
+  const dropInterval = setInterval(() => {
+    removeBomb(bombStart);
+    bombStart = bombStart + 16;
+    addBomb(bombStart);
+    console.log("bombs away");
+    if (bombStart > 223) {
+      console.log("no more bomb");
+      removeBomb(bombStart);
+      clearInterval(dropInterval);
+    }
+    if (bombStart === playerCurrentPosition) {
+      removeBomb(bombStart);
+      clearInterval(dropInterval);
+      console.log("player got dunked!");
+      //playerLives--;
+    }
+  }, 500);
+}
+
 // this function successfully finds a random alien from the alien Army array
 // tomorrow we will incorporate this into a bomb dropping system.
-console.log(randomAlien(alienArmy));
+dropBomb();
+console.log(randomAlien());
 document.addEventListener("keydown", handleKeyDown);
