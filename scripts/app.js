@@ -14,7 +14,7 @@ const livesDisplay = document.getElementById("lives-display");
 const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
 let invasionBegins = null;
-let gameSpeed = 2000;
+let gameSpeed = 100;
 let isPlaying = false;
 
 function reset() {
@@ -178,7 +178,6 @@ function dropBomb() {
 let direction = "RIGHT";
 
 function moveAliens() {
-  //setInterval(() => {
   if (direction === "RIGHT") {
     if (alienPosition % 16 === 5) {
       aMoveDown();
@@ -198,19 +197,16 @@ function moveAliens() {
       console.log("moveleft is called");
     }
   }
-  //}, 2000);
 }
 
 function endGame() {
-  if (!lives) {
-    clearInterval(invasionBegins);
-    removeAlien();
-    alienPosition = 18;
-    setTimeout(() => alert(playerScore), 50);
-    const highScore = localStorage.removeItem("high-score");
-    if (!highScore || playerScore > highScore) {
-      localStorage.setItem("high-score", playerScore);
-    }
+  clearInterval(invasionBegins);
+  removeAlien();
+  alienPosition = 18;
+  setTimeout(() => alert(playerScore), 50);
+  const highScore = localStorage.removeItem("high-score");
+  if (!highScore || playerScore > highScore) {
+    localStorage.setItem("high-score", playerScore);
   }
 }
 
@@ -221,6 +217,7 @@ function invaded() {
         relativePosition + alienPosition === playerCurrentPosition
     )
   ) {
+    console.log("alien collision");
     clearInterval(invasionBegins);
     endGame();
   }
@@ -233,6 +230,7 @@ function startGame() {
     invasionBegins = setInterval(() => {
       moveAliens();
       dropBomb();
+      invaded();
       if (!lives) {
         endGame();
       }
@@ -242,11 +240,6 @@ function startGame() {
 }
 
 createGrid();
-// this function successfully finds a random alien from the alien Army array
-// tomorrow we will incorporate this into a bomb dropping system.
-//moveAliens();
-//dropBomb();
-//console.log(alienPosition);
 document.addEventListener("keydown", handleKeyDown);
 startButton.addEventListener("click", startGame);
 resetButton.addEventListener("click", reset);
