@@ -4,9 +4,9 @@ const grid = document.querySelector(".grid");
 const width = 15;
 const cellCount = width * width + 1;
 const cells = [];
-let playerCurrentPosition = 215;
-const playerBoundaryLeft = 208;
-const playerBoundaryRight = 223;
+let playerCurrentPosition = 199;
+const playerBoundaryLeft = 192;
+const playerBoundaryRight = 207;
 //let alienCurrentPosition = 71;
 
 let alienArmy = [
@@ -14,7 +14,7 @@ let alienArmy = [
   32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 48, 49, 50, 51, 52, 53, 54, 55,
   56, 57, 58,
 ];
-let alienPosition = 34;
+let alienPosition = 18;
 
 function drawAliens() {
   alienArmy.forEach((relativePosition) =>
@@ -131,7 +131,7 @@ function dropBomb() {
     bombStart = bombStart + 16;
     addBomb(bombStart);
     console.log("bombs away");
-    if (bombStart > 223) {
+    if (bombStart > 207) {
       console.log("no more bomb");
       removeBomb(bombStart);
       clearInterval(dropInterval);
@@ -140,7 +140,7 @@ function dropBomb() {
       removeBomb(bombStart);
       clearInterval(dropInterval);
       console.log("player got dunked!");
-      //playerLives--;
+      //playerLives--;-----------------------------------------------------------------------
     }
   }, 500);
 }
