@@ -14,19 +14,27 @@ const livesDisplay = document.getElementById("lives-display");
 const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
 let invasionBegins = null;
-let gameSpeed = 3000;
+let gameSpeed = 1000;
 let isPlaying = false;
 let direction = "RIGHT";
+let killCount = 0;
+//const nextURL = "https://my-space-invaders.com";
 
 function reset() {
   playerScore = 0;
   scoreDisplay.textContent = playerScore;
   lives = 3;
   livesDisplay.innerHTML = "❤".repeat(lives);
-  isPlaying = false;
   removeAlien();
   clearInterval(invasionBegins);
-  //invasionBegins = null;
+  killCount = 0;
+  alienArmy = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+    26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 48, 49, 50, 51, 52, 53, 54,
+    55, 56, 57, 58,
+  ];
+  alienPosition = 18;
+  direction = "RIGHT";
 }
 
 let alienArmy = [
@@ -86,6 +94,11 @@ function removeBomb(position) {
 function addBomb(position) {
   cells[position].classList.add("bomb");
 }
+//---------------------------------------------------------------------------
+// function fullClear() {
+//   cells.forEach.classList.remove("bomb", "shot");
+// }
+//---------------------------------------------------------------------------
 function aMoveRight() {
   removeAlien();
   alienPosition = alienPosition + 1;
@@ -103,20 +116,22 @@ function aMoveDown() {
 }
 
 function handleKeyDown(event) {
-  removePlayer(playerCurrentPosition);
-  if (event.keyCode === 37 && playerCurrentPosition !== playerBoundaryLeft) {
-    playerCurrentPosition--;
-  } else if (
-    event.keyCode === 39 &&
-    playerCurrentPosition !== playerBoundaryRight
-  ) {
-    playerCurrentPosition++;
-  } else if (event.keyCode === 32) {
-    fireShot();
-    console.log("A shot was fired!");
+  if (isPlaying === true) {
+    removePlayer(playerCurrentPosition);
+    if (event.keyCode === 37 && playerCurrentPosition !== playerBoundaryLeft) {
+      playerCurrentPosition--;
+    } else if (
+      event.keyCode === 39 &&
+      playerCurrentPosition !== playerBoundaryRight
+    ) {
+      playerCurrentPosition++;
+    } else if (event.keyCode === 32) {
+      fireShot();
+      //console.log("A shot was fired!");
+    }
+    addPlayer(playerCurrentPosition);
+    //console.log(`player current position ${playerCurrentPosition}`);
   }
-  addPlayer(playerCurrentPosition);
-  console.log(`player current position ${playerCurrentPosition}`);
 }
 
 function fireShot() {
@@ -125,9 +140,9 @@ function fireShot() {
     removeShot(shotStart);
     shotStart = shotStart - 16;
     addShot(shotStart);
-    console.log(shotStart);
+    //console.log(shotStart);
     if (shotStart < 16) {
-      console.log("the shot has stopped");
+      //console.log("the shot has stopped");
       removeShot(shotStart);
       clearInterval(shotInterval);
     }
@@ -140,7 +155,9 @@ function fireShot() {
       removeShot(shotStart);
       alienArmy = alienArmy.filter((alien) => alien !== hitByShot);
       playerScore += 100;
-      console.log(`player score is ${playerScore}`);
+      killCount++;
+      //console.log(`the killcount is ${killCount}`);
+      //console.log(`player score is ${playerScore}`);
       scoreDisplay.textContent = playerScore;
       clearInterval(shotInterval);
     }
@@ -152,6 +169,10 @@ function fireShot() {
     //   clearInterval(shotInterval);
     //   console.log("the alien was destroyed");
     // }
+    if (isPlaying !== true) {
+      removeShot(shotStart);
+      clearInterval(shotInterval);
+    }
   }, 150);
 }
 
@@ -160,24 +181,30 @@ function randomAlien() {
 }
 
 function dropBomb() {
+  //if (isPlaying === true) {
   let bombStart = randomAlien() + alienPosition;
   const dropInterval = setInterval(() => {
     removeBomb(bombStart);
     bombStart = bombStart + 16;
     addBomb(bombStart);
-    console.log("bombs away");
+    //console.log("bombs away");
     if (bombStart > 207) {
-      console.log("no more bomb");
+      //console.log("no more bomb");
       removeBomb(bombStart);
       clearInterval(dropInterval);
     }
     if (bombStart === playerCurrentPosition) {
       removeBomb(bombStart);
       clearInterval(dropInterval);
-      console.log("player got dunked!");
+      //console.log("player got dunked!");
       lives--;
     }
+    if (isPlaying !== true) {
+      removeBomb(bombStart);
+      clearInterval(dropInterval);
+    }
   }, 500);
+  //}
 }
 
 function moveAliens() {
@@ -185,28 +212,40 @@ function moveAliens() {
     if (alienPosition % 16 === 5) {
       aMoveDown();
       direction = "LEFT";
-      console.log("movedown 1 is called");
+      //console.log("movedown 1 is called");
     } else {
       aMoveRight();
-      console.log("moveright is called");
+      //console.log("moveright is called");
     }
   } else if (direction === "LEFT") {
     if (alienPosition % 16 === 0) {
       aMoveDown();
       direction = "RIGHT";
-      console.log("movedown 2 is called");
+      //console.log("movedown 2 is called");
     } else {
       aMoveLeft();
-      console.log("moveleft is called");
+      //console.log("moveleft is called");
     }
   }
 }
 
 function endGame() {
-  clearInterval(invasionBegins);
-  removePlayer();
+  console.log("Endgame activates");
+  //clearInterval(invasionBegins);
+  removePlayer(playerCurrentPosition);
   removeAlien();
-  alienPosition = 18;
+  //fullClear();
+  //reset();
+  // killCount = 0;
+  // //clearInterval(dropInterval);
+  // alienArmy = [
+  //   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+  //   26, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 48, 49, 50, 51, 52, 53, 54,
+  //   55, 56, 57, 58,
+  // ];
+  // alienPosition = 18;
+  isPlaying = false;
+  //console.log(`are you still playing ${isPlaying}`);
   setTimeout(() => alert(playerScore), 50);
   const highScore = localStorage.removeItem("high-score");
   if (!highScore || playerScore > highScore) {
@@ -221,7 +260,7 @@ function invaded() {
         relativePosition + alienPosition === playerCurrentPosition
     )
   ) {
-    console.log("alien collision");
+    //console.log("alien collision");
     clearInterval(invasionBegins);
     endGame();
   }
@@ -254,7 +293,12 @@ function startGame() {
       if (!lives) {
         endGame();
       }
-      // if ((alienArmy.length = undefined)) {
+      if (killCount === 44) {
+        console.log("You've defeated all of the aliens");
+        clearInterval(invasionBegins);
+        endGame();
+      }
+      // if ((alienArmy.length === 0)) {
       //   console.log("Victory!");
       //   //   victory();
       // }
@@ -267,3 +311,6 @@ createGrid();
 document.addEventListener("keydown", handleKeyDown);
 startButton.addEventListener("click", startGame);
 resetButton.addEventListener("click", reset);
+//window.location.href = nextURL;
+//window.location.assign(nextURL);
+//window.location.replace(nextURL);
