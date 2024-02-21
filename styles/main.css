@@ -39,22 +39,22 @@ body {
 }
 
 .grid div.player {
-  background-image: url("assets/playerShip.png"); /* placeholder used, remember to change to a player avatar */
+  background-image: url("assets/RB_Old_man_Back.png"); /* placeholder used, remember to change to a player avatar */
   background-repeat: no-repeat;
   background-size: contain;
 }
 .grid div.alien {
-  background-image: url("assets/alien.jpg"); /* placeholder used, remember to change to a player avatar */
+  background-image: url("assets/tauros.png"); /* placeholder used, remember to change to a player avatar */
   background-repeat: no-repeat;
   background-size: contain;
 }
 .grid div.shot {
-  background-image: url("assets/newRocket.png"); /* placeholder used, remember to change to a player avatar */
+  background-image: url("assets/pokeball-pixel-art.png"); /* placeholder used, remember to change to a player avatar */
   background-repeat: no-repeat;
   background-size: contain;
 }
 .grid div.bomb {
-  background-image: url("assets/bomb.png"); /* placeholder used, remember to change to a player avatar */
+  background-image: url("assets/blast.png"); /* placeholder used, remember to change to a player avatar */
   background-repeat: no-repeat;
   background-size: contain;
 }

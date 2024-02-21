@@ -21,6 +21,8 @@ let killCount = 0;
 //const nextURL = "https://my-space-invaders.com";
 
 function reset() {
+  isPlaying = false;
+  removePlayer(playerCurrentPosition);
   playerScore = 0;
   scoreDisplay.textContent = playerScore;
   lives = 3;
@@ -35,6 +37,7 @@ function reset() {
   ];
   alienPosition = 18;
   direction = "RIGHT";
+  playerCurrentPosition = 199;
 }
 
 let alienArmy = [
@@ -205,6 +208,10 @@ function dropBomb() {
     }
   }, 500);
   //}
+  // if (isPlaying !== true) {
+  //   removeBomb(bombStart);
+  //   clearInterval(dropInterval);
+  // }
 }
 
 function moveAliens() {
@@ -234,7 +241,10 @@ function endGame() {
   //clearInterval(invasionBegins);
   removePlayer(playerCurrentPosition);
   removeAlien();
-  removeBomb();
+  isPlaying = false;
+  //console.log(`are you playing ${isPlaying}`);
+
+  //removeBomb(); ///the buck stops here for some reason
   //fullClear();
   //reset();
   // killCount = 0;
@@ -245,7 +255,7 @@ function endGame() {
   //   55, 56, 57, 58,
   // ];
   // alienPosition = 18;
-  isPlaying = false;
+
   //console.log(`are you still playing ${isPlaying}`);
   setTimeout(() => alert(`Amazing your score was ${playerScore}!`), 50);
   const highScore = localStorage.removeItem("high-score");
@@ -289,9 +299,12 @@ function startGame() {
     addPlayer(playerCurrentPosition);
     invasionBegins = setInterval(() => {
       moveAliens();
-      dropBomb();
+      if (killCount < 44) {
+        dropBomb();
+      }
       invaded();
       if (!lives) {
+        clearInterval(invasionBegins);
         endGame();
       }
       if (killCount === 44) {
