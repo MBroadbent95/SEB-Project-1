@@ -234,6 +234,7 @@ function endGame() {
   //clearInterval(invasionBegins);
   removePlayer(playerCurrentPosition);
   removeAlien();
+  removeBomb();
   //fullClear();
   //reset();
   // killCount = 0;
@@ -246,7 +247,7 @@ function endGame() {
   // alienPosition = 18;
   isPlaying = false;
   //console.log(`are you still playing ${isPlaying}`);
-  setTimeout(() => alert(playerScore), 50);
+  setTimeout(() => alert(`Amazing your score was ${playerScore}!`), 50);
   const highScore = localStorage.removeItem("high-score");
   if (!highScore || playerScore > highScore) {
     localStorage.setItem("high-score", playerScore);
