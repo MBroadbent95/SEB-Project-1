@@ -13,6 +13,7 @@ let lives = 3;
 const livesDisplay = document.getElementById("lives-display");
 const resetButton = document.getElementById("reset");
 const startButton = document.getElementById("start");
+const muteButton = document.getElementById("mute");
 let invasionBegins = null;
 let gameSpeed = 1000;
 let isPlaying = false;
@@ -22,9 +23,9 @@ let killCount = 0;
 let shotSound = new Audio("styles/sounds/HitMarker.wav");
 shotSound.volume = 0.3;
 let winSound = new Audio("styles/sounds/captureWin.wav");
-winSound.volume = 0.5;
-let backgroundTrack = new Audio("styles/sounds/crystalBeast.wav");
-backgroundTrack.volume = 0.3;
+winSound.volume = 0.4;
+let backgroundTrack = new Audio("styles/sounds/crystal.wav");
+backgroundTrack.volume = 0.1;
 
 function reset() {
   isPlaying = false;
@@ -44,6 +45,7 @@ function reset() {
   alienPosition = 18;
   direction = "RIGHT";
   playerCurrentPosition = 199;
+  backgroundTrack.pause();
 }
 
 let alienArmy = [
@@ -123,6 +125,9 @@ function aMoveDown() {
   removeAlien();
   alienPosition = alienPosition + 16;
   drawAliens();
+}
+function mute() {
+  backgroundTrack.pause();
 }
 
 function handleKeyDown(event) {
@@ -336,6 +341,7 @@ createGrid();
 document.addEventListener("keydown", handleKeyDown);
 startButton.addEventListener("click", startGame);
 resetButton.addEventListener("click", reset);
+muteButton.addEventListener("click", mute);
 //window.location.href = nextURL;
 //window.location.assign(nextURL);
 //window.location.replace(nextURL);
