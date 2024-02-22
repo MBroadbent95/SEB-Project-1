@@ -31,6 +31,7 @@ let gotDamaged = new Audio("styles/sounds/damaged.wav");
 gotDamaged.volume = 0.4;
 let splat = new Audio("styles/sounds/splat.wav");
 splat.volume = 0.4;
+let isMuted = "FALSE";
 
 function reset() {
   isPlaying = false;
@@ -117,7 +118,13 @@ function aMoveDown() {
   drawAliens();
 }
 function mute() {
-  backgroundTrack.pause();
+  if (isMuted === "FALSE") {
+    isMuted = "TRUE";
+    backgroundTrack.pause();
+  } else if (isMuted === "TRUE") {
+    isMuted = "FALSE";
+    backgroundTrack.play();
+  }
 }
 
 function handleKeyDown(event) {
@@ -215,12 +222,11 @@ function moveAliens() {
 }
 
 function endGame() {
-  console.log("Endgame activates");
   removePlayer(playerCurrentPosition);
   removeAlien();
   isPlaying = false;
   backgroundTrack.pause();
-  setTimeout(() => alert(`Amazing your score was ${playerScore}!`), 100);
+  setTimeout(() => alert(`Your score was ${playerScore}!`), 100);
   const highScore = localStorage.removeItem("high-score");
   if (!highScore || playerScore > highScore) {
     localStorage.setItem("high-score", playerScore);
