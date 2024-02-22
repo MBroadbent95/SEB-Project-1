@@ -19,6 +19,12 @@ let isPlaying = false;
 let direction = "RIGHT";
 let killCount = 0;
 //const nextURL = "https://my-space-invaders.com";
+let shotSound = new Audio("styles/sounds/HitMarker.wav");
+shotSound.volume = 0.3;
+let winSound = new Audio("styles/sounds/captureWin.wav");
+winSound.volume = 0.5;
+let backgroundTrack = new Audio("styles/sounds/crystalBeast.wav");
+backgroundTrack.volume = 0.3;
 
 function reset() {
   isPlaying = false;
@@ -90,6 +96,7 @@ function removeShot(position) {
 }
 function addShot(position) {
   cells[position].classList.add("shot");
+  // shotSound.play();
 }
 function removeBomb(position) {
   cells[position].classList.remove("bomb");
@@ -159,6 +166,7 @@ function fireShot() {
       alienArmy = alienArmy.filter((alien) => alien !== hitByShot);
       playerScore += 100;
       killCount++;
+      shotSound.play();
       //console.log(`the killcount is ${killCount}`);
       //console.log(`player score is ${playerScore}`);
       scoreDisplay.textContent = playerScore;
@@ -242,6 +250,8 @@ function endGame() {
   removePlayer(playerCurrentPosition);
   removeAlien();
   isPlaying = false;
+  backgroundTrack.pause();
+  winSound.play();
   //console.log(`are you playing ${isPlaying}`);
 
   //removeBomb(); ///the buck stops here for some reason
@@ -295,6 +305,7 @@ function invaded() {
 function startGame() {
   if (!isPlaying) {
     isPlaying = !isPlaying;
+    backgroundTrack.play();
     drawAliens();
     addPlayer(playerCurrentPosition);
     invasionBegins = setInterval(() => {
