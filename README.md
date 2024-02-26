@@ -59,15 +59,20 @@ If a player loses all of their lives, it is Game Over!
 - Last minute features, favicon & README write up.
 
   ### When loading the Page:
-
+You will see a block of static scenery wherin the game will be played.
+Instructions are based at the bottom of the screen.
+Three buttons appear towards the bottom of the screen, these include: Start, Reset & Mute.
 
 
   ### When the Game starts:
+The primary game assets will appear on the canvas in the center of the screen.
+A herd of Tauros will charge towards the player avatar in a zig-zag oattern, they start at the top end of the screen but will attempt to trample the player by making their way to the bottom of the screen.
+Background music will begin to play until the game is over unless the player clicks the mute button.
 
 
-
-  ### When the player avatar moves:
-
+  ### Controlling the player avatar:
+The player has the ability to move let and right until they reach the edge of the screen. They can move 1 cell at a time or hold either corresponding arrow key to move multiple cells at a time.
+The player can throw unlimited poke-balls at the Tauros to defend themselves, once a Tauros is caught it is no longer a threat and will be filtered from the incoming herd.
 
 
   ### Key Learnings:
